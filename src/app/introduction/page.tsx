@@ -8,7 +8,7 @@ import { gsap } from "gsap";
 const Preloader = React.lazy(() => import("@/app/components/ui/Preloader"));
 
 // Define the libraries array for Google Maps API
-const libraries: ("places")[] = ["places"];
+const libraries: "places"[] = ["places"];
 
 const IntroductionPage: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
@@ -20,7 +20,7 @@ const IntroductionPage: React.FC = () => {
   const [showLabel, setShowLabel] = useState(true);
   const [showLocationPlaceholder, setShowLocationPlaceholder] = useState(false);
   const [error, setError] = useState("");
-  const [isValidLocation, setIsValidLocation] = useState(false); 
+  const [isValidLocation, setIsValidLocation] = useState(false);
   const [businessAddressError, setBusinessAddressError] = useState("");
 
   // Ref declarations
@@ -59,7 +59,7 @@ const IntroductionPage: React.FC = () => {
       if (storedLocation) {
         setLocation(storedLocation);
         setShowLabel(false);
-        setIsValidLocation(true);  
+        setIsValidLocation(true);
       }
     }
 
@@ -75,11 +75,7 @@ const IntroductionPage: React.FC = () => {
 
       // Animate title
       if (titleRef.current) {
-        timeline.fromTo(
-          titleRef.current,
-          { yPercent: 100 },
-          { yPercent: 0 }
-        );
+        timeline.fromTo(titleRef.current, { yPercent: 100 }, { yPercent: 0 });
       }
 
       // Animate form elements
@@ -98,7 +94,8 @@ const IntroductionPage: React.FC = () => {
 
       // Animate buttons
       const buttonsToAnimate: HTMLElement[] = [];
-      if (proceedButtonRef.current) buttonsToAnimate.push(proceedButtonRef.current);
+      if (proceedButtonRef.current)
+        buttonsToAnimate.push(proceedButtonRef.current);
       if (backButtonRef.current) buttonsToAnimate.push(backButtonRef.current);
 
       if (buttonsToAnimate.length > 0) {
@@ -144,7 +141,7 @@ const IntroductionPage: React.FC = () => {
     if (places && places.length > 0) {
       const place = places[0];
       const newLocation = place.formatted_address || "";
-  
+
       // Exclude business or non-residential types
       const businessTypes = [
         "establishment",
@@ -162,14 +159,16 @@ const IntroductionPage: React.FC = () => {
         "tourist_attraction",
         "night_club",
       ];
-  
+
       // Check if the selected place is categorized as a business or other non-residential type
       const isBusinessAddress = place.types?.some((type) =>
         businessTypes.includes(type)
       );
-  
+
       if (isBusinessAddress) {
-        setBusinessAddressError("Please enter a residential address, not a business or commercial address.");
+        setBusinessAddressError(
+          "Please enter a residential address, not a business or commercial address."
+        );
         setIsValidLocation(false);
         setLocation("");
       } else {
@@ -185,7 +184,7 @@ const IntroductionPage: React.FC = () => {
       setBusinessAddressError("");
     }
   };
-  
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -204,11 +203,15 @@ const IntroductionPage: React.FC = () => {
         // TODO: Handle successful submission (e.g., show a success message or redirect)
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          setError("An error occurred while submitting the form. Please try again.");
+          setError(
+            "An error occurred while submitting the form. Please try again."
+          );
         }
       }
     } else {
-      setError(step === 1 ? "Please enter your name" : "Please enter a valid location");
+      setError(
+        step === 1 ? "Please enter your name" : "Please enter a valid location"
+      );
     }
   };
 
@@ -271,7 +274,7 @@ const IntroductionPage: React.FC = () => {
   // Render loading state
   if (!isClient || !isLoaded || isLoading) {
     return (
-      <React.Suspense fallback={<div>Loading...</div>}>
+      <React.Suspense fallback={<div></div>}>
         <Preloader />
       </React.Suspense>
     );
@@ -412,7 +415,9 @@ const IntroductionPage: React.FC = () => {
                 aria-describedby="introduction-form__input"
               >
                 {error && <span className="error-message">{error}</span>}
-                {businessAddressError && <span className="error-message">{businessAddressError}</span>}
+                {businessAddressError && (
+                  <span className="error-message">{businessAddressError}</span>
+                )}
               </div>
             </div>
           </form>
