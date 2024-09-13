@@ -1,4 +1,4 @@
-# Skinstric.ai Frontend Project
+# Skinstric.ai Internship Project
 
 This repository is part of an internship project where I am contributing to the frontend development of **Skinstric**, an AI startup specializing in customized skincare products. The aim is to replace Skinstric’s outdated codebase with modern coding best practices and technologies, delivering a scalable and maintainable solution.
 
