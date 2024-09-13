@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
+import "./globals.min.css";
+import SessionToast from "./components/ui/SessionToast";
 
 const roobertRegular = localFont({
   src: [
@@ -31,7 +32,7 @@ const roobertSemiBold = localFont({
       style: "normal",
     },
   ],
-  variable: "--font-roobert-semibold", 
+  variable: "--font-roobert-semibold",
 });
 
 export const metadata: Metadata = {
@@ -64,13 +65,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="icon"
+          href="https://skinstric-nine.vercel.app/img/favicon/favicon-16x16.png"
+          sizes="16x16"
+          type="image/png"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body
-        style={{ fontFamily: `"Roobert", sans-serif` }}  
-        className={`${roobertRegular.variable} ${roobertSemiBold.variable} antialiased`} 
+        style={{ fontFamily: `"Roobert", sans-serif` }}
+        className={`${roobertRegular.variable} ${roobertSemiBold.variable} antialiased`}
       >
         {children}
+        <SessionToast />
       </body>
     </html>
   );
 }
-
