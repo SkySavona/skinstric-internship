@@ -286,10 +286,11 @@ const IntroductionPage: React.FC = () => {
       className="main"
       style={{
         position: "relative",
-        height: "100vh",
+        height: "100dvh",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",
+       
       }}
     >
       {/* Header component */}
@@ -308,12 +309,14 @@ const IntroductionPage: React.FC = () => {
 
       {/* Main content */}
       <div
+      
         className="page wrapper"
         style={{
           flex: 1,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          
         }}
       >
         {/* Title */}
