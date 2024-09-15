@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.min.css";
-import SessionToast from "./components/ui/SessionToast";
+import CookieToast from "./components/ui/CookieToast";
 
 const roobertRegular = localFont({
   src: [
@@ -79,7 +79,7 @@ export default function RootLayout({
         className={`${roobertRegular.variable} ${roobertSemiBold.variable} antialiased`}
       >
         {children}
-        <SessionToast />
+        <CookieToast />
       </body>
     </html>
   );

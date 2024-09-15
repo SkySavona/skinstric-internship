@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-const SessionToast: React.FC = () => {
+const CookieToast: React.FC = () => {
   const [showToast, setShowToast] = useState(false);
   const toastRef = useRef<HTMLDivElement>(null);
 
@@ -22,12 +22,12 @@ const SessionToast: React.FC = () => {
         width: "0px",
         height: "1px",
         opacity: 1,
-        display: "block"
+        display: "block",
       });
 
       // Animate horizontally
       gsap.to(toastRef.current, {
-        width: "400px",
+        width: "30vw", // Use viewport width to make it responsive
         duration: 0.6,
         ease: "power2.out",
         onComplete: () => {
@@ -66,17 +66,19 @@ const SessionToast: React.FC = () => {
   return (
     <div
       ref={toastRef}
-      className="app-message AppMessage_container__vV0YG CookiesAgreement_container___Pi1s AppMessage_fixed__qcwRf curtain-enter-done"
+      className="app-message AppMessage_container__vV0YG CookiesAgreement_container___Pi1s AppMessage_fixed__qcwRf curtain-enter-done "
       style={{
         position: "fixed",
         top: "56px",
-        left: "16px",
+        right: "16px",
         backgroundColor: "#1a1b1c",
         color: "#fcfcfc",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
         zIndex: 20,
         overflow: "hidden",
-        display: "none", 
+        display: "none",
+        marginRight: "16px",
+        width: "400px", // Default width
       }}
     >
       <div className="app-message__top AppMessage_top__SVYRx">
@@ -95,4 +97,4 @@ const SessionToast: React.FC = () => {
   );
 };
 
-export default SessionToast;
+export default CookieToast;

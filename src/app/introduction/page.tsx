@@ -4,6 +4,8 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useLoadScript, StandaloneSearchBox } from "@react-google-maps/api";
 import axios from "axios";
 import { gsap } from "gsap";
+import { useRouter } from 'next/navigation';
+import Header from "../components/layout/Header";
 
 const Preloader = React.lazy(() => import("@/app/components/ui/Preloader"));
 
@@ -11,6 +13,7 @@ const Preloader = React.lazy(() => import("@/app/components/ui/Preloader"));
 const libraries: "places"[] = ["places"];
 
 const IntroductionPage: React.FC = () => {
+  const router = useRouter();
   const [isClient, setIsClient] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [step, setStep] = useState(1);
@@ -189,24 +192,22 @@ const IntroductionPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (step === 1 && name.trim()) {
-      handleNextStep();
+      setStep(2);
     } else if (step === 2 && location.trim() && isValidLocation) {
       try {
         await axios.post("/api/submit", { name, location });
+        
         // Reset form state after successful submission
         setName("");
         setLocation("");
         setStep(1);
         setError("");
         setIsValidLocation(false);
-        setBusinessAddressError("");
-        // TODO: Handle successful submission (e.g., show a success message or redirect)
+
+        // Redirect to TestingPage after successful form submission
+        router.push('/testing');  // Assuming 'testing' is the correct route
       } catch (error) {
-        if (axios.isAxiosError(error)) {
-          setError(
-            "An error occurred while submitting the form. Please try again."
-          );
-        }
+        setError("An error occurred while submitting the form. Please try again.");
       }
     } else {
       setError(
@@ -294,18 +295,7 @@ const IntroductionPage: React.FC = () => {
       }}
     >
       {/* Header component */}
-      <header className="header wrapper js-header Header_header__DR57N">
-        <div className="Header_left__S1crO">
-          <a
-            className="text-button Header_logo___mrgN cursor-not-allowed"
-            href=""
-            style={{ clipPath: "inset(0%)" }}
-          >
-            Skinstric
-          </a>
-        </div>
-        <div className="Header_right__4jKrY"></div>
-      </header>
+      <Header />
 
       {/* Main content */}
       <div
