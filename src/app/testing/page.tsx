@@ -12,6 +12,7 @@ const TestingPage: React.FC = () => {
   const galleryAccessBtnRef = useRef<HTMLButtonElement>(null);
   const animationSquareRef = useRef<HTMLSpanElement>(null);
   const [showToaster, setShowToaster] = useState(false);
+  const toasterRef = useRef<HTMLDivElement>(null);
 
   const handleGoBack = () => {
     router.back();
@@ -21,7 +22,7 @@ const TestingPage: React.FC = () => {
   };
 
   const handleCancel = () => {
-    setShowToaster(false);
+    closeToaster();
   };
 
   const handleUpload = () => {
@@ -31,14 +32,32 @@ const TestingPage: React.FC = () => {
     input.onchange = (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
-        // Here you would typically upload the file to your server
         console.log('File selected:', file.name);
-        // After upload logic, close the toaster
-        setShowToaster(false);
+        closeToaster();
       }
     };
     input.click();
   };
+
+  const closeToaster = () => {
+    if (toasterRef.current) {
+      gsap.to(toasterRef.current, {
+        height: "1px",
+        duration: 0.6,
+        ease: "power2.in",
+        onComplete: () => {
+          gsap.to(toasterRef.current, {
+            width: "0px",
+            duration: 0.6,
+            ease: "power2.in",
+            onComplete: () => setShowToaster(false),
+          });
+        },
+      });
+    }
+  };
+
+
   // GSAP animations
   useEffect(() => {
     const timeline = gsap.timeline({
@@ -64,6 +83,30 @@ const TestingPage: React.FC = () => {
       "-=0.8"
     );
   }, []);
+
+   // Toaster animation
+   useEffect(() => {
+    if (showToaster && toasterRef.current) {
+      gsap.set(toasterRef.current, {
+        width: "0px",
+        height: "1px",
+        opacity: 1,
+        display: "block",
+      });
+      gsap.to(toasterRef.current, {
+        width: "30vw",
+        duration: 0.6,
+        ease: "power2.out",
+        onComplete: () => {
+          gsap.to(toasterRef.current, {
+            height: "auto",
+            duration: 0.6,
+            ease: "power2.out",
+          });
+        },
+      });
+    }
+  }, [showToaster]);
 
   return (
     <main
@@ -254,38 +297,54 @@ const TestingPage: React.FC = () => {
           </button>
         </div>
       </div>
-      {showToaster && (
-        <div className="ensure_message">
-          <div className="app-message AppMessage_container__vV0YG analysis-message-item curtain-enter-done">
-            <div className="app-message__top AppMessage_top__SVYRx">
-              <p>Please ensure your selfie has:</p>
-              <div style={{borderBottom: '1px solid rgb(252, 252, 252)', width: '100%', position: 'absolute', left: 0, marginTop: '10px'}}></div>
-              <ul className="list-unstyled text-caption analysis-message-list" style={{marginTop: '35px'}}>
-                <li className="analysis-message-list__item ">Neutral Expression</li>
-                <p>smiling may distort wrinkles</p>
-                <li className="analysis-message-list__item ">Frontal Pose</li>
-                <p>take the image from an arm's length away at eye level </p>
-                <li className="analysis-message-list__item">Adequate Lighting</li>
-                <p>avoid harsh downlighting and aim for natural or soft light </p>
-              </ul>
-            </div>
-            <div className="app-message__bottom AppMessage_bottom__5GoID">
-              <button 
-                className="text-button btn Button_btn__wpFCD Button_btn-dark__QZyGW Button_uppercase__bZ3k_" 
-                data-hover="Cancel" 
-                style={{opacity: 0.7}}
-                onClick={handleCancel}
-              >
-                <span className="btn-inner Button_btn-inner___9jC5">Cancel</span>
-              </button>
-              <button 
-                className="text-button btn Button_btn__wpFCD Button_btn-dark__QZyGW Button_uppercase__bZ3k_" 
-                data-hover="Upload"
-                onClick={handleUpload}
-              >
-                <span className="btn-inner Button_btn-inner___9jC5">Upload</span>
-              </button>
-            </div>
+  {/* Toaster Notification */}
+  {showToaster && (
+        <div 
+          ref={toasterRef}
+          className="app-message AppMessage_container__vV0YG CookiesAgreement_container___Pi1s AppMessage_fixed__qcwRf curtain-enter-done"
+          style={{
+            position: "fixed",
+            top: "200px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "#1a1b1c",
+            color: "#fcfcfc",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+            zIndex: 20,
+            overflow: "hidden",
+            display: "none",
+            width: "90%", 
+            maxWidth: "400px",
+          }}
+        >
+          <div className="app-message__top AppMessage_top__SVYRx">
+            <p>Please ensure your selfie has:</p>
+            <div style={{borderBottom: '1px solid rgb(252, 252, 252)', width: '100%', position: 'absolute', left: 0, marginTop: '10px'}}></div>
+            <ul className="list-unstyled text-caption analysis-message-list" style={{marginTop: '35px'}}>
+              <li className="analysis-message-list__item ">Neutral Expression</li>
+              <p>smiling may distort wrinkles</p>
+              <li className="analysis-message-list__item ">Frontal Pose</li>
+              <p>take the image from an arm's length away at eye level </p>
+              <li className="analysis-message-list__item">Adequate Lighting</li>
+              <p>avoid harsh downlighting and aim for natural or soft light </p>
+            </ul>
+          </div>
+          <div className="app-message__bottom AppMessage_bottom__5GoID">
+            <button 
+              className="text-button btn Button_btn__wpFCD Button_btn-dark__QZyGW Button_uppercase__bZ3k_" 
+              data-hover="Cancel" 
+              style={{opacity: 0.7}}
+              onClick={handleCancel}
+            >
+              <span className="btn-inner Button_btn-inner___9jC5">Cancel</span>
+            </button>
+            <button 
+              className="text-button btn Button_btn__wpFCD Button_btn-dark__QZyGW Button_uppercase__bZ3k_" 
+              data-hover="Upload"
+              onClick={handleUpload}
+            >
+              <span className="btn-inner Button_btn-inner___9jC5">Upload</span>
+            </button>
           </div>
         </div>
       )}
