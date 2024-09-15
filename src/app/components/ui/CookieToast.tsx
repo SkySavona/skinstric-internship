@@ -17,30 +17,60 @@ const CookieToast: React.FC = () => {
 
   useEffect(() => {
     if (showToast && toastRef.current) {
-      // Set initial state
-      gsap.set(toastRef.current, {
-        width: "0px",
-        height: "1px",
-        opacity: 1,
-        display: "block",
+      const mm = gsap.matchMedia();
+  
+      // Define different animations for different screen sizes
+      mm.add("(min-width: 768px)", () => {
+        // For larger screens (min-width: 768px)
+        gsap.set(toastRef.current, {
+          width: "0px",
+          height: "1px",
+          opacity: 1,
+          display: "block",
+        });
+  
+        gsap.to(toastRef.current, {
+          width: "30vw",
+          duration: 0.6,
+          ease: "power2.out",
+          onComplete: () => {
+            gsap.to(toastRef.current, {
+              height: "auto",
+              duration: 0.6,
+              ease: "power2.out",
+            });
+          },
+        });
       });
-
-      // Animate horizontally
-      gsap.to(toastRef.current, {
-        width: "30vw", // Use viewport width to make it responsive
-        duration: 0.6,
-        ease: "power2.out",
-        onComplete: () => {
-          // Animate vertically
-          gsap.to(toastRef.current, {
-            height: "auto",
-            duration: 0.6,
-            ease: "power2.out",
-          });
-        },
+  
+      mm.add("(max-width: 767px)", () => {
+        // For medium screens and below (max-width: 767px)
+        gsap.set(toastRef.current, {
+          width: "0px",
+          height: "1px",
+          opacity: 1,
+          display: "block",
+        });
+  
+        gsap.to(toastRef.current, {
+          width: "50vw",
+          duration: 0.6,
+          ease: "power2.out",
+          onComplete: () => {
+            gsap.to(toastRef.current, {
+              height: "auto",
+              duration: 0.6,
+              ease: "power2.out",
+            });
+          },
+        });
       });
+  
+      // Cleanup the media query listeners on unmount
+      return () => mm.revert();
     }
   }, [showToast]);
+  
 
   const handleClose = () => {
     if (toastRef.current) {

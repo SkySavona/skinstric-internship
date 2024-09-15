@@ -192,17 +192,17 @@ const IntroductionPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (step === 1 && name.trim()) {
-      setStep(2);
+      handleNextStep();
     } else if (step === 2 && location.trim() && isValidLocation) {
       try {
         await axios.post("/api/submit", { name, location });
-        
         // Reset form state after successful submission
         setName("");
         setLocation("");
         setStep(1);
         setError("");
         setIsValidLocation(false);
+        setBusinessAddressError("");
 
         // Redirect to TestingPage after successful form submission
         router.push('/testing');  // Assuming 'testing' is the correct route
