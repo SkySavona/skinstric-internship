@@ -85,6 +85,12 @@ const TestingPage: React.FC = () => {
           const response = await sendImageToAPI(base64Image);
           console.log('API Response:', response);
           setApiResponse(response);
+          
+          // Store the API response in sessionStorage
+          sessionStorage.setItem('apiResponse', JSON.stringify(response));
+          
+          // Redirect to demographics page
+          router.push('/demographics');
         } catch (error) {
           console.error('Error processing image:', error);
           setError('An error occurred while processing the image. Please try again.');
@@ -95,9 +101,6 @@ const TestingPage: React.FC = () => {
             await new Promise(resolve => setTimeout(resolve, 5000 - elapsedTime));
           }
           setIsLoading(false);
-          if (!error) {
-            router.push('/demographics');
-          }
         }
       }
     };
